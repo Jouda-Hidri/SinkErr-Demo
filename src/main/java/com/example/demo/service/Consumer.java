@@ -11,26 +11,28 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Consumer {
-	
-    private final Producer producer;
 
-    @Autowired
-    Consumer(Producer producer) {
-        this.producer = producer;
-    }
+	private final Producer producer;
 
-    private final Logger logger = LoggerFactory.getLogger(Consumer.class);
+	@Autowired
+	Consumer(Producer producer) {
+		this.producer = producer;
+	}
 
-    @KafkaListener(topics = "broadway", groupId = "group_id")
-    public void consume(String message) throws IOException {
-        logger.info(String.format("#### -> received message -> %s", message));
-    }
-    
-    @KafkaListener(topics = "broadway_err", groupId = "group_id")
-    public void consumeErr(String message) throws IOException {
-        logger.info(String.format("#### -> received error -> %s", message));
-        // retry
-        String corrected = message.replaceAll("[^0-9.]", "");
-        this.producer.sendMessage(corrected);
-    }
+	private final Logger logger = LoggerFactory.getLogger(Consumer.class);
+
+	@KafkaListener(topics = "broadway", groupId = "group_id")
+	public void consume(String message, final Acknowledgment acknowledgment) throws IOException {
+		logger.info(String.format("#### -> received message -> %s", message));
+		acknowledgment.acknowledge();
+	}
+
+	@KafkaListener(topics = "broadway_err", groupId = "group_id")
+	public void consumeErr(String message, final Acknowledgment acknowledgment) throws IOException {
+		logger.info(String.format("#### -> received error -> %s", message));
+		// retry
+		String corrected = message.replaceAll("[^0-9.]", "");
+		this.producer.sendMessage(corrected);
+		acknowledgment.acknowledge();
+	}
 }
