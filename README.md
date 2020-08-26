@@ -1,2 +1,1 @@
-# confluent-spring
-# confluent-spring
+# Example Kafka-Confluent and Spring
