@@ -22,17 +22,19 @@ public class Consumer {
 	private final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
 	@KafkaListener(topics = "broadway", groupId = "group_id")
-	public void consume(String message, final Acknowledgment acknowledgment) throws IOException {
+	public void consume(Object message, final Acknowledgment acknowledgment) throws IOException {
 		logger.info(String.format("#### -> received message -> %s", message));
 		acknowledgment.acknowledge();
 	}
 
 	@KafkaListener(topics = "broadway_err", groupId = "group_id")
-	public void consumeErr(String message, final Acknowledgment acknowledgment) throws IOException {
+	public void consumeErr(Object message, final Acknowledgment acknowledgment) throws IOException {
 		logger.info(String.format("#### -> received error -> %s", message));
 		// retry
-		String corrected = message.replaceAll("[^0-9.]", "");
-		this.producer.sendMessage(corrected);
+		/*
+		message.correct();
+		this.producer.sendMessage(message);
+		*/
 		acknowledgment.acknowledge();
 	}
 }
