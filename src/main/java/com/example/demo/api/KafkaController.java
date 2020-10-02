@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.service.Message;
 import com.example.demo.service.Producer;
 
 @RestController
@@ -29,7 +30,7 @@ public class KafkaController {
     }
     
     @PostMapping(value = "/publish")
-    public String sendMessageToKafkaTopic(@RequestBody Object message) {
+    public String sendMessageToKafkaTopic(@RequestBody Message message) {
         this.producer.sendMessage(message);
         return "Alles klar";
     }
