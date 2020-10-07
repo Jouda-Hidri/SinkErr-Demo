@@ -1,17 +1,13 @@
 package com.example.demo.service;
 
+import lombok.Getter;
+
+@Getter
 public class Message {
-	private String m;
-
-	public String getM() {
-		return m;
-	}
-
-	public void setM(String m) {
-		this.m = m;
-	}
+	private long id;
+	private String text;
 
 	public void correct() {
-		this.m = m.replaceAll("[^0-9.]", "");
+		this.text = text.replaceAll("[^0-9.]", "");
 	}
 }
