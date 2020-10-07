@@ -1,7 +1,15 @@
 version: '2'
 
 services:
-  # this is our kafka cluster.
+#  app:
+#    container_name: sinkerr
+#    image: sinkerr
+#    build: ./
+#    ports:
+#      - "9000:9000"
+#    depends_on:
+#      - dbpostgresql
+#      - kafka-cluster
   kafka-cluster:
     image: landoop/fast-data-dev:cp3.3.0
     environment:
@@ -14,11 +22,12 @@ services:
       - 9581-9585:9581-9585       # JMX Ports
       - 9092:9092                 # Kafka Broker
 
-  postgres:
-    image: postgres:9.5-alpine
-    environment:
-      POSTGRES_USER: postgres     # define credentials
-      POSTGRES_PASSWORD: postgres # define credentials
-      POSTGRES_DB: postgres       # define database
+  dbpostgresql:
+    image: postgres
     ports:
-      - 5432:5432                 # Postgres port
+      - "5432:5432"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=polldb

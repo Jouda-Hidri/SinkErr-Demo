@@ -14,3 +14,24 @@ spring:
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     template:
       default-topic: greetings
+#  datasource:
+#    url: jdbc:postgresql://dbpostgresql:5432/polldb
+#    driver-class-name: org.postgresql.Driver
+#    username: postgres
+#    password: password
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:~/sinkerdb
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  flyway:
+    baselineOnMigrate: true

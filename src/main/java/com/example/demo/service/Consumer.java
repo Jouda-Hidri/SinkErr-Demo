@@ -10,6 +10,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Service
 public class Consumer {
 
@@ -19,12 +21,22 @@ public class Consumer {
 	Consumer(Producer producer) {
 		this.producer = producer;
 	}
+	
+	@Autowired
+	private MessageRepo repo;
+	
+	@Autowired
+	private ObjectMapper mapper;
 
 	private final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
 	@KafkaListener(topics = "broadway", groupId = "group_id")
 	public void consume(ConsumerRecord<?, ?> consumerRecord) throws IOException {
-		logger.info("received data='{}'", consumerRecord.toString());
+		String json = consumerRecord.value().toString();
+		logger.info("received data='{}'", json);
+		// todo persist
+		Message message = mapper.readValue(json, Message.class);
+		repo.save(message);
 	}
 
 	@KafkaListener(topics = "broadway_err", groupId = "group_id")

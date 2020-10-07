@@ -1,9 +1,14 @@
 package com.example.demo.service;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import lombok.Getter;
 
 @Getter
+@Entity
 public class Message {
+	@Id
 	private long id;
 	private String text;
 
