@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.fake;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.sink.Message;
+
 @Service
 public class FakeService {
 	
     private static final Logger logger = LoggerFactory.getLogger(FakeService.class);
-    private static final String TOPIC = "broadway";
-    private static final String TOPIC_ERR = "broadway_err";
+    private static final String TOPIC = "sink";
+    private static final String TOPIC_ACK = "sink_ack";
 	
 	@Autowired
 	private KafkaTemplate<String, Message> kafkaTemplate;

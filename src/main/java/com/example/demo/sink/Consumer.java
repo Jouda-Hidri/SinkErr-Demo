@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.sink;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class Consumer {
 
 	private final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
-	@KafkaListener(topics = "broadway", groupId = "group_id")
+	@KafkaListener(topics = "sink", groupId = "group_id")
 	public void consume(ConsumerRecord<?, ?> consumerRecord) throws IOException {
 		String json = consumerRecord.value().toString();
 		logger.info("received data='{}'", json);
@@ -32,7 +32,7 @@ public class Consumer {
 		repo.save(message);
 	}
 
-	@KafkaListener(topics = "broadway_err", groupId = "group_id")
+	@KafkaListener(topics = "sink_ack", groupId = "group_id")
 	public void consumeErr(String message, final Acknowledgment acknowledgment) throws IOException {
 		logger.info(String.format("#### -> received error -> %s", message));
 		// retry

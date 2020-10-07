@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.sink;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
