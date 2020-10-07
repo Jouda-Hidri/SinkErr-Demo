@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 @Entity
 public class Message {
-	@Id
-	private long id;
+    @Id
+    private Long id;
 	private String text;
 
 	public void correct() {

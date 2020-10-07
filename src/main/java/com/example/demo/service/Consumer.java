@@ -14,13 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class Consumer {
-
-	private final Producer producer;
-
-	@Autowired
-	Consumer(Producer producer) {
-		this.producer = producer;
-	}
 	
 	@Autowired
 	private MessageRepo repo;

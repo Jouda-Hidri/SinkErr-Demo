@@ -1,4 +1,4 @@
 CREATE TABLE message (
-  id BIGINT PRIMARY KEY,
+  id bigint primary key,
   text VARCHAR(255)
 );
