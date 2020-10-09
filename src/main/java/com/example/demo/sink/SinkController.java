@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 @RestController
 @RequestMapping(value = "/sink")
 public class SinkController {
@@ -19,13 +21,13 @@ public class SinkController {
 	
     @GetMapping(value = "/show")
     @ResponseBody
-    public List<Message> show() {
+    public List<Sink> show() {
         return service.show();
     }
     
     @PatchMapping(value = "/fix")
     @ResponseBody
-    public Message fix(@RequestBody Message message) {
+    public Sink fix(@RequestBody SinkDto message) throws JsonProcessingException {
         return service.fix(message);
     }
 }

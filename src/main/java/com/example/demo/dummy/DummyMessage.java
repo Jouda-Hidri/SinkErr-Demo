@@ -1,4 +1,4 @@
-package com.example.demo.sink;
+package com.example.demo.dummy;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Entity
-public class Message {
+public class DummyMessage {
     @Id
     private Long id;
     @Setter

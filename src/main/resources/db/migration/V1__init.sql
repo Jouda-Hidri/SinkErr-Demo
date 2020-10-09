@@ -1,4 +1,5 @@
-CREATE TABLE message (
+CREATE TABLE sink (
   id bigint primary key,
-  text VARCHAR(255)
+  dest VARCHAR(255),
+  payload text
 );

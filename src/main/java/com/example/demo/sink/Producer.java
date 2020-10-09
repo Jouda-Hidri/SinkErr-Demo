@@ -6,25 +6,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.fake.FakeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class Producer {
-	private static final Logger logger = LoggerFactory.getLogger(FakeService.class);
-	private static final String TOPIC = "sink";
-	private static final String TOPIC_ACK = "sink_ack";
-	private static final String TOPIC_FAKE = "fake"; // fake service
+	private static final Logger logger = LoggerFactory.getLogger(Producer.class);
 
 	@Autowired
-	private KafkaTemplate<String, Message> kafkaTemplate;
+	private KafkaTemplate<String, Sink> kafkaTemplate;
 
-	public void sink(final Message message) {
-		logger.info(String.format("#### -> Sink -> %s", message.getText()));
-		kafkaTemplate.send(TOPIC, message);
-	}
+	@Autowired
+	private KafkaTemplate<String, JsonNode> kafkaRetryTemplate;
 	
-	public void retry(final Message message) {
-		logger.info(String.format("#### -> retry Fake -> %s", message.getText()));
-		kafkaTemplate.send(TOPIC_FAKE, message);
+	@Autowired
+	private ObjectMapper mapper;
+
+	public void sink(final Sink message) {
+		logger.info(String.format("#### -> Sink -> %s", message.getPayload()));
+		kafkaTemplate.send("sink", message);
 	}
+
+	public void retry(final Sink message) throws JsonMappingException, JsonProcessingException {
+		logger.info(String.format("#### -> retry -> %s", message.getPayload()));
+		JsonNode payload = mapper.readTree(message.getPayload());
+		kafkaRetryTemplate.send(message.getDest(), payload);
+	}
+
 }

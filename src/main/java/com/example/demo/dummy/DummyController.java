@@ -1,4 +1,4 @@
-package com.example.demo.fake;
+package com.example.demo.dummy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
-@RequestMapping(value = "/fake")
-public class FakeController {
+@RequestMapping(value = "/dummy")
+public class DummyController {
 
     @Autowired
-    private FakeService service;
+    private DummyService service;
     
     @PostMapping(value = "/publish")
-    public String publish(@RequestBody FakeMessage message) throws JsonProcessingException { // todo 400 instead of throw
-        return this.service.process(message);
+    public String publish(@RequestBody DummyMessage message) throws JsonProcessingException { // todo 400 instead of throw
+        return service.process(message);
     }
 
 }
