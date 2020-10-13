@@ -6,11 +6,11 @@ spring:
       #ack-mode: manual
     consumer:
        enable-auto-commit: true #false
-       bootstrap-servers: localhost:9092
+       bootstrap-servers: kafka:9092 #localhost:9092
        group-id: group_id
        auto-offset-reset: latest
     producer:
-        bootstrap-servers: localhost:9092
+        bootstrap-servers: kafka:9092 #localhost:9092
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     template:
       default-topic: greetings
@@ -28,6 +28,8 @@ spring:
     console:
       enabled: true
       path: /h2
+      settings:
+        web-allow-others: true
   datasource:
     url: jdbc:h2:file:~/sinkerdb
     username: sa

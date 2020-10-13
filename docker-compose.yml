@@ -1,33 +1,54 @@
 version: '2'
 
 services:
-#  app:
-#    container_name: sinkerr
-#    image: sinkerr
-#    build: ./
-#    ports:
-#      - "9000:9000"
-#    depends_on:
-#      - dbpostgresql
-#      - kafka-cluster
-  kafka-cluster:
-    image: landoop/fast-data-dev:cp3.3.0
-    environment:
-      ADV_HOST: 127.0.0.1         # Change to 192.168.99.100 if using Docker Toolbox
-      RUNTESTS: 0                 # Disable Running tests so the cluster starts faster
+  app:
+    container_name: sinkerr
+    image: sinkerr
+    build: ./
     ports:
-      - 2181:2181                 # Zookeeper
-      - 3030:3030                 # Landoop UI
-      - 8081-8083:8081-8083       # REST Proxy, Schema Registry, Kafka Connect ports
-      - 9581-9585:9581-9585       # JMX Ports
-      - 9092:9092                 # Kafka Broker
+      - "9000:9000"
+    depends_on:
+      - kafka
+      - zookeeper
+  # ZooKeeper is a centralized service for maintaining configuration information,
+  # naming, providing distributed synchronization, and providing group services.
+  # It provides distributed coordination for our Kafka cluster.
+  # http://zookeeper.apache.org/
+  zookeeper:
+    image: zookeeper:3.4.9
+    # ZooKeeper is designed to "fail-fast", so it is important to allow it to
+    # restart automatically.
+    restart: unless-stopped
+    hostname: zookeeper
+    # We'll expose the ZK client port so that we can connect to it from our applications.
+    ports:
+      - "2181:2181"
+    volumes:
+      - ./volumes/zookeeper/data:/data
+      - ./volumes/zookeeper/datalog:/datalog
 
-  dbpostgresql:
-    image: postgres
+  # Kafka is a distributed streaming platform. It is used to build real-time streaming
+  # data pipelines that reliably move data between systems and platforms, and to build
+  # real-time streaming applications that transform or react to the streams of data.
+  # http://kafka.apache.org/
+  kafka:
+    image: confluentinc/cp-kafka:4.1.0
+    hostname: kafka
     ports:
-      - "5432:5432"
+      - "9092:9092"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=polldb
+      # Required. Kafka will publish this address to ZooKeeper so clients know
+      # how to get in touch with Kafka. "PLAINTEXT" indicates that no authentication
+      # mechanism will be used.
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
+      # Required. Instructs Kafka how to get in touch with ZooKeeper.
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      # Required when running in a single-node cluster, as we are. We would be able to take the default if we had
+      # three or more nodes in the cluster.
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./volumes/kafka/data:/var/lib/kafka/data
+    # As Kafka relies upon ZooKeeper, this will instruct docker to wait until the zookeeper service
+    # is up before attempting to start Kafka.
+    depends_on:
+      - zookeeper
