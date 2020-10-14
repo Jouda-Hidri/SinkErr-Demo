@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SinkService {
 
 	@Autowired
-	private MessageRepo repo;
+	private SinkRepo repo;
 
 	@Autowired
 	private Producer producer;

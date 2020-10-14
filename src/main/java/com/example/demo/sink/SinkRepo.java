@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MessageRepo extends CrudRepository<Sink, Long> {
+public interface SinkRepo extends CrudRepository<Sink, Long> {
 
 }
