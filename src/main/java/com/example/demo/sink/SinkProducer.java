@@ -12,27 +12,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
-public class Producer {
-	private static final Logger logger = LoggerFactory.getLogger(Producer.class);
+public class SinkProducer {
+	private static final Logger logger = LoggerFactory.getLogger(SinkProducer.class);
 
 	@Autowired
-	private KafkaTemplate<String, Sink> kafkaTemplate;
-
-	@Autowired
-	private KafkaTemplate<String, JsonNode> kafkaRetryTemplate;
+	private KafkaTemplate<String, JsonNode> kafkaTemplate;
 	
 	@Autowired
 	private ObjectMapper mapper;
 
-	public void sink(final Sink message) {
-		logger.info(String.format("#### -> Sink -> %s", message.getPayload()));
-		kafkaTemplate.send("sink", message);
-	}
-
 	public void retry(final Sink message) throws JsonMappingException, JsonProcessingException {
 		logger.info(String.format("#### -> retry -> %s", message.getPayload()));
 		JsonNode payload = mapper.readTree(message.getPayload());
-		kafkaRetryTemplate.send(message.getDest(), payload);
+		kafkaTemplate.send(message.getDest(), payload);
 	}
 
 }

@@ -5,19 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.sink.Sink;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.demo.fake.FakeService;
-import com.example.demo.sink.Producer;
 
 @Service
 public class DummyService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(FakeService.class);
+	private static final Logger logger = LoggerFactory.getLogger(DummyService.class);
 
 	@Autowired
-	private Producer producer;
+	private DummyProducer producer;
 	
 	@Autowired
 	private ObjectMapper mapper;

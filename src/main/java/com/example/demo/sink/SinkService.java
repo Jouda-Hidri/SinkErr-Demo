@@ -17,7 +17,7 @@ public class SinkService {
 	private SinkRepo repo;
 
 	@Autowired
-	private Producer producer;
+	private SinkProducer producer;
 	
 	@Autowired
 	private ObjectMapper mapper;
