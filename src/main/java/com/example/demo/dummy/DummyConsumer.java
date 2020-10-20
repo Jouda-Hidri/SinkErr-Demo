@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 
-import com.example.demo.sink.Consumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DummyConsumer {
@@ -19,7 +18,7 @@ public class DummyConsumer {
 	@Autowired
 	private ObjectMapper mapper;
 
-	private final Logger logger = LoggerFactory.getLogger(Consumer.class);
+	private final Logger logger = LoggerFactory.getLogger(DummyConsumer.class);
 	
 	@KafkaListener(topics = "dummy", groupId = "group_id")
 	public void consumeDummyRetrial(ConsumerRecord<?, ?> consumerRecord) throws IOException {

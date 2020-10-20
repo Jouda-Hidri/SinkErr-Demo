@@ -1,9 +1,16 @@
 version: '2'
 
 services:
+  sinkerr:
+    image: jh_sinkerr:latest
+    ports:
+      - "9001:9001"
+    depends_on:
+      - kafka
+      - zookeeper
   app:
-    container_name: sinkerr
-    image: sinkerr
+    container_name: demo_sinkerr
+    image: demo_sinkerr
     build: ./
     ports:
       - "9000:9000"
